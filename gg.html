@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cocktail Randomizer</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      margin-top: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4286f4;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 32px;
+      font-weight: bold;
+      position: relative;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .alcoholic-animation {
+      animation-name: nausea;
+    }
+
+    @keyframes nausea {
+      0% {
+        transform: rotateZ(0deg);
+      }
+      50% {
+        transform: rotateZ(10deg);
+      }
+      100% {
+        transform: rotateZ(0deg);
+      }
+    }
+
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ffeb3b;
+      border-radius: 50%;
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-color: #ff5722;
+      border-radius: 50% 50% 40% 40%;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Random Cocktail Generator</h1>
+  <button onclick="generateCocktail()">Generate Cocktail</button>
+  <div id="message"></div>
+
+  <script>
+    var cocktails = [
+      { name: "Mojito", alcoholic: true },
+      { name: "Cosmopolitan", alcoholic: true },
+      { name: "Shirley Temple", alcoholic: false },
+      { name: "Margarita", alcoholic: true },
+      { name: "Virgin Piña Colada", alcoholic: false }
+    ];
+
+    function generateCocktail() {
+      var randomIndex = Math.floor(Math.random() * cocktails.length);
+      var randomCocktail = cocktails[randomIndex];
+      var cocktailName = randomCocktail.name;
+      var messageElement = document.getElementById("message");
+
+      messageElement.innerText = cocktailName;
+      messageElement.innerHTML += "<br>";
+
+      if (randomCocktail.alcoholic) {
+        messageElement.innerHTML += "You are an alcoholic.";
+        messageElement.classList.remove("non-alcoholic-animation");
+        messageElement.classList.add("alcoholic-animation");
+      } else {
+        messageElement.innerHTML += "Enjoy your non-alcoholic drink!";
+        messageElement.classList.remove("alcoholic-animation");
+        messageElement.classList.remove("non-alcoholic-animation");
+        showConfetti();
+      }
+
+      messageElement.classList.add("animated");
+      setTimeout(function() {
+        messageElement.classList.remove("animated");
+      }, 1000);
+    }
+
+    function showConfetti() {
+      var confettiContainer = document.createElement("div");
+      confettiContainer.classList.add("confetti-container");
+      document.body.appendChild(confettiContainer);
+
+      for (var i = 0; i < 100; i++) {
+        var confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "%";
+        confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+        confetti.style.animationDelay = Math.random() * 2 + "s";
+        confettiContainer.appendChild(confetti);
+      }
+
+      var balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      confettiContainer.appendChild(balloon);
+
+      setTimeout(function() {
+        document.body.removeChild(confettiContainer);
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
